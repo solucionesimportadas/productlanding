@@ -1,0 +1,199 @@
+import React, { useEffect, useState } from "react";
+
+const App = () => {
+  const [timeLeft, setTimeLeft] = useState({ hours: 7, minutes: 59, seconds: 59 });
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  // Cuenta regresiva de 8 horas
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        const newSeconds = prev.seconds - 1;
+        if (newSeconds < 0) {
+          const newMinutes = prev.minutes - 1;
+          if (newMinutes < 0) {
+            const newHours = prev.hours - 1;
+            if (newHours < 0) {
+              clearInterval(timer);
+              return { hours: 0, minutes: 0, seconds: 0 };
+            }
+            return { hours: newHours, minutes: 59, seconds: 59 };
+          }
+          return { ...prev, minutes: newMinutes, seconds: 59 };
+        }
+        return { ...prev, seconds: newSeconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Testimonios dinámicos
+  const testimonials = [
+    {
+      name: "Ana M.",
+      text: "Me encantó el resultado después de solo dos semanas. Mis dientes nunca habían estado tan blancos y sin sensibilidad.",
+      rating: 5,
+    },
+    {
+      name: "Lucas R.",
+      text: "Es fácil de usar y noté la diferencia desde la primera semana. Vale cada centavo.",
+      rating: 5,
+    },
+    {
+      name: "Florencia D.",
+      text: "Lo mejor es que no necesito ir al dentista para tener una sonrisa perfecta.",
+      rating: 4,
+    },
+  ];
+
+  // Rotación automática de testimonios
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
+  const formatTime = (num) => String(num).padStart(2, "0");
+
+  return (
+    <div className="font-sans bg-white text-gray-800">
+      {/* Hero Section Mobile Optimized */}
+      <section className="max-w-md mx-auto px-4 py-6">
+        <div className="flex flex-col items-center gap-4">
+          {/* Product Image with Free Shipping Label */}
+          <div className="relative w-full max-w-xs mx-auto">
+            <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+              ENVÍO GRATIS
+            </span>
+            <img
+              src="https://dcdn-us.mitiendanube.com/stores/005/210/499/products/pro_596c0fbc818b94f98e5a1bb59ef01d8a-dd11f36ca71a3400ea17505311824252-1024-1024.jpg" 
+              alt="Carbón Coco Blanqueador Dental"
+              className="w-full rounded-lg shadow-lg"
+            />
+            <h3 className="text-center mt-2 text-sm font-semibold">Blanqueador Dental Natural Carbón Coco</h3>
+          </div>
+
+          {/* Product Info */}
+          <div className="w-full space-y-3 text-center">
+            <h1 className="text-xl font-bold">Carbón Coco™ Blanqueador Dental</h1>
+            <p className="text-gray-600 text-sm">Sabor Original</p>
+
+            {/* Stars & Reviews */}
+            <div className="flex justify-center space-x-1">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.45c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.45a1 1 0 00.95-.69l1.07-3.292z" />
+                </svg>
+              ))}
+              <span className="ml-1 text-xs text-gray-600">(123 reseñas)</span>
+            </div>
+
+            {/* Prices */}
+            <div className="flex items-center justify-center space-x-2 mt-2">
+              <span className="line-through text-gray-500 text-sm">$24.999</span>
+              <span className="text-red-600 font-bold text-base">$17.499</span>
+            </div>
+
+            {/* Countdown Timer */}
+            <div className="bg-red-100 p-2 rounded-md inline-block mt-3">
+              <div className="text-red-800 text-xs font-semibold">
+                ¡Oferta por tiempo limitado! Quedan:{" "}
+                <span className="inline-flex gap-1">
+                  <span>{formatTime(timeLeft.hours)}h</span>
+                  <span>{formatTime(timeLeft.minutes)}m</span>
+                  <span>{formatTime(timeLeft.seconds)}s</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Call to Action */}
+            <a
+              href="https://solucionesdeseguridad.com.ar/productos/blanqueador-dental-natural-carbon-coco/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full bg-green-600 hover:bg-green-700 text-white text-center font-bold py-3 px-4 rounded-lg shadow transition duration-300 mt-3 text-sm"
+            >
+              Comprar Ahora - Envío Gratis
+            </a>
+
+            {/* Benefits with Emojis */}
+            <ul className="space-y-1 mt-4 text-xs text-gray-700">
+              <li>✨ Resultados desde el primer uso</li>
+              <li>🌱 100% Natural y vegano</li>
+              <li>🦷 Sin sensibilidad dental</li>
+              <li>🌍 Ecológico y sostenible</li>
+              <li>💰 Precio accesible con garantía</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Banner Informativo desde Imgur */}
+      <section className="max-w-md mx-auto px-4 mb-6">
+        <img
+          src="https://pronapresa.com/cdn/shop/products/blanqueador-dental-de-carbon-activado-productos-naturales-cuidado-personal-salud-y-belleza-tienda-naturista-pronapresa-2.jpg?v=1684429274&width=1000"
+          alt="Banner informativo"
+          className="w-full rounded-lg shadow-md"
+        />
+      </section>
+
+      {/* Video Section */}
+      <section className="bg-gray-100 py-6">
+        <div className="max-w-md mx-auto px-4">
+          <h2 className="text-lg font-bold mb-4 text-center">¿Cómo se usa?</h2>
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://player.vimeo.com/video/901322727?h=072895480f"
+              title="Cómo usar Carbón Coco"
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              className="absolute inset-0 w-full h-full"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Carousel */}
+      <section className="py-6 bg-white">
+        <div className="max-w-md mx-auto px-4">
+          <h2 className="text-lg font-bold mb-4 text-center">Testimonios</h2>
+          <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center">
+            <div className="mb-3 flex justify-center">
+              {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.45c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.45a1 1 0 00.95-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="italic text-gray-700 text-sm mb-2">"{testimonials[currentTestimonial].text}"</p>
+            <p className="font-semibold text-sm">— {testimonials[currentTestimonial].name}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="bg-gradient-to-r from-green-500 to-teal-400 text-white py-6 text-center px-4 sticky bottom-0 z-30">
+        <a
+          href="https://solucionesdeseguridad.com.ar/productos/blanqueador-dental-natural-carbon-coco/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block font-bold text-sm md:text-base"
+        >
+          COMPRAR AHORA, ENVIO GRATIS
+        </a>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-4 text-center text-xs">
+        <p>&copy; {new Date().getFullYear()} Carbon Coco | Todos los derechos reservados</p>
+        <p className="mt-1">Este producto no sustituye la atención odontológica profesional.</p>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
